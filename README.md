@@ -21,7 +21,7 @@ fluidSpline(obj = data.frame(x=1:10,y=runif(10)),cW = 700,cH = 300)
 
 ##Usage in a Shiny app
 
-When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define how the relationship between two variables should be.
+When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
 ```
 library(fluidSpline)
