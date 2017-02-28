@@ -2,12 +2,22 @@
 % Please edit documentation in R/fluidSpline.R
 \name{fluidSpline}
 \alias{fluidSpline}
-\title{<Add Title>}
+\title{fluidSpline}
 \usage{
-fluidSpline(n = 11, interpolation = "linear", cW = 1000, cH = 500,
-  width = NULL, height = NULL, elementId = NULL)
+fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), cW = 1000,
+  cH = 500, width = NULL, height = NULL, elementId = NULL)
+}
+\arguments{
+\item{obj}{data.frame that contains coordinates x,y}
+
+\item{cW}{numeric plot width in px}
+
+\item{cH}{numeric plot height in px}
 }
 \description{
-<Add Description>
+Htmlwidget that allows users to interact with locations of points on a plot
+}
+\examples{
+if(interactive()) fluidSpline()
 }
 

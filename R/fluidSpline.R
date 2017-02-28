@@ -1,17 +1,22 @@
-#' <Add Title>
+#' @title fluidSpline
 #'
-#' <Add Description>
+#' @description Htmlwidget that allows users to interact with locations of points on a plot
+#' 
+#' @param obj data.frame that contains coordinates x,y
+#' @param cW numeric plot width in px
+#' @param cH numeric plot height in px
 #'
+#' @examples
+#' if(interactive()) fluidSpline()
 #' @import htmlwidgets
 #'
 #' @export
-fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),interpolation='linear',cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
+fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
   x = list(
     data=obj,
     n=nrow(obj),
-    interpolation=interpolation,
     width=cW,
     height=cH
   )
