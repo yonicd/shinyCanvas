@@ -108,7 +108,7 @@ HTMLWidgets.widget({
 
 			       if(typeof(Shiny) !== "undefined"){
                 Shiny.onInputChange(el.id + "_update",{
-                  ".pointsData": JSON.decycle(pointsOut)
+                  ".pointsData": JSON.stringify(pointsOut)
                 });
 			       }
         }
