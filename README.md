@@ -23,6 +23,8 @@ fluidSpline(obj = data.frame(x=1:10,y=runif(10)),cW = 700,cH = 300)
 
 When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
+Click Picture to see Youtube Video
+
 [![fluidSpline in Shiny](http://img.youtube.com/vi/obfjcYty7vk/0.jpg)](https://www.youtube.com/watch?v=obfjcYty7vk)
 
 ```
