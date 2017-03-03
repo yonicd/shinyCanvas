@@ -12,20 +12,22 @@ server <- function(input, output) {
   observeEvent(network$nodes,{
     output$pointsOut<-renderTable({
       dat=network$nodes
+      colnames(dat)=names(df())
       dat.df=data.frame(Id=1:nrow(dat),dat)
-      names(dat.df)=c('Id','X','Y')
       dat.df
     })    
   })
 
-
+df<-reactive({
+  data.frame(Var1=1:10,Var2=sort(rexp(10),decreasing = T))
+})
   output$d3 <- renderFluidSpline({
-    isolate({fluidSpline(obj = data.frame(x=1:10,y=runif(10)),cW =     600,cH = 300)})
+    isolate({fluidSpline(obj = df(),cW =     600,cH = 300)})
   })
 }
 
 ui <- fluidPage(
-  column(9,fluidSplineOutput(outputId="d3",width = '1000px',height = '800px')),
+  column(9,fluidSplineOutput(outputId="d3",width = '600px',height = '600px')),
   column(3,tableOutput('pointsOut'))
 )
 
