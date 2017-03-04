@@ -16,10 +16,10 @@ rect {
   pointer-events: all;
 }
 
-circleBig{
-  fill:steelblue;
-  stroke: #fff;
-  stroke-width: 3px;
+ellipse {
+  fill: steelblue;
+  stroke: steelblue;
+  stroke-width: 1px;
 }
 
 circle,

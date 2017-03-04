@@ -20,49 +20,53 @@ HTMLWidgets.widget({
             aLabel.innerHTML = "Interpolate:";
         var aSelect=document.createElement("Select");
             aSelect.setAttribute("id", item);
+        /*var aButton = document. createElement("button");    
+            aButton. innerHTML = "Animate";*/
             
         el.appendChild(aForm);
         aForm.appendChild(aLabel);
         aForm.appendChild(aSelect);
-      
+        //aForm.appendChild(aButton);
+        
         var margin={top:20,right:20,bottom:30,left:40};
         var width = x.width-margin.left-margin.right;
         var height = x.height-margin.top-margin.bottom;
 
- //var points= [[5,3], [10,100], [15,4], [2,8]];
+ //var points= [[5,3], [10,10], [15,4], [2,8]];
  var data = x.data; 
  var axisName=Object.keys(data);
  var points = d3.range(0, x.n).map(function(i) {
           return [data[axisName[0]][i], data[axisName[1]][i]];
         });
+ var pointsFloat = points[0];
  
  
 // setup x 
-var xValue = function(d) { return d[0];}, // data -> value
-    xScale = d3.scale.linear()
-							.domain([d3.min(points, xValue)-1, d3.max(points, xValue)+1])
-              .range([ 0, width ]),
-              
-    xMap = function(d) { return xScale(xValue(d));}, // data -> display
-    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-
-// setup y
-var yValue = function(d) { return d[1];}, // data -> value
-    yScale = d3.scale.linear()
-						.domain([d3.min(points, yValue)-1, d3.max(points, yValue)+1])
-    	      .range([ height, 0 ]), // value -> display
-    yMap = function(d) { return yScale(yValue(d));}, // data -> display
-    yAxis = d3.svg.axis().scale(yScale).orient("left");  
-
-var xScaleInv = d3.scale.linear()
-							.range([d3.min(points, xValue)-1, d3.max(points, xValue)+1])
-              .domain([ 0, width ]),
-  xMapInv = function(d) { return xScaleInv(d);},
-  yScaleInv = d3.scale.linear()
-							.range([d3.min(points, yValue)-1, d3.max(points, yValue)+1])
-    	      .domain([ height, 0 ]),
-  yMapInv = function(d) { return yScaleInv(d);};
+  var xValue = function(d) { return d[0];}, // data -> value
+      xScale = d3.scale.linear()
+  							.domain([d3.min(points, xValue)-1, d3.max(points, xValue)+1])
+                .range([ 0, width ]),
+                
+      xMap = function(d) { return xScale(xValue(d));}, // data -> display
+      xAxis = d3.svg.axis().scale(xScale).orient("bottom");
   
+  // setup y
+  var yValue = function(d) { return d[1];}, // data -> value
+      yScale = d3.scale.linear()
+  						.domain([d3.min(points, yValue)-1, d3.max(points, yValue)+1])
+      	      .range([ height, 0 ]), // value -> display
+      yMap = function(d) { return yScale(yValue(d));}, // data -> display
+      yAxis = d3.svg.axis().scale(yScale).orient("left");  
+  
+  var xScaleInv = d3.scale.linear()
+  							.range([d3.min(points, xValue)-1, d3.max(points, xValue)+1])
+                .domain([ 0, width ]),
+    xMapInv = function(d) { return xScaleInv(d);},
+    yScaleInv = d3.scale.linear()
+  							.range([d3.min(points, yValue)-1, d3.max(points, yValue)+1])
+      	      .domain([ height, 0 ]),
+    yMapInv = function(d) { return yScaleInv(d);};
+    
 // add the tooltip area to the webpage
 var tooltip = d3.select(el).append("div")
     .attr("class", "tooltip")
@@ -141,21 +145,16 @@ d3.select("#interpolate")
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text(axisName[1]);   
-    
+
 function redraw() {
-	svg.select("path").attr("d", line);
+  
+	var path=svg.select("path").attr("d", line);
 
   var circle = svg.selectAll("circle").data(points);
   
   circle.enter().append("circle")
       .attr("cx", xMap)
       .attr("cy", yMap);
-  
-  circle.on("mousedown", function(d) { selected = dragged = d; redraw(); })
-    .transition()
-      .duration(750)
-      .ease("elastic")
-      .attr("r", 2);
   
   circle.on("mouseover", function(d) {
           tooltip.transition()
@@ -173,8 +172,7 @@ function redraw() {
                .style("opacity", 0);
       });
 
-  circle
-      .classed("selected", function(d) { return d === selected; })
+  circle.classed("selected", function(d) { return d === selected; })
       .attr("cx", xMap)
       .attr("cy", yMap);
 
@@ -184,27 +182,50 @@ function redraw() {
     d3.event.preventDefault();
     d3.event.stopPropagation();
   }
-  
-  
-  var pointsOut = points;
 
-			       if(typeof(Shiny) !== "undefined"){
-                Shiny.onInputChange(el.id + "_update",{
-                  ".pointsData": JSON.stringify(pointsOut)
-                });
-			       }
+  circle.on("mousedown", function(d) { selected = dragged = d; redraw(); })
+    .transition()
+      .duration(750)
+      .ease("elastic")
+      .attr("r", 2);
+
+  var circleBig = svg.append("ellipse")
+  .attr("rx", 10)
+  .attr("ry", 10)
+  .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
+
+transition();
+
+function transition() {
+  circleBig.transition()
+      .duration(10000)
+      .attrTween("transform", translateAlong(path.node()))
+      .each("end", transition);
 }
 
-	//var circleBig = svg.append("circleBig")
-  //.attr('r',13)
-  //.attr('transform','translate('+ xMap(points[0]) + ',' + yMap(points[0]) +')');
-  
-  //transition();
+function translateAlong(path) {
+  var l = path.getTotalLength();
+  return function(d, i, a) {
+    return function(t) {
+      var p = path.getPointAtLength(t * l);
+      return "translate(" + p.x + "," + p.y + ")";
+    };
+  };
+} 
+
+ if(typeof(Shiny) !== "undefined"){
+    Shiny.onInputChange(el.id + "_update",{
+      ".pointsData": JSON.stringify(points)
+    });
+ }
+
+}
 
 function change() {
   line
   .tension(0)
   .interpolate(this.value);
+  svg.selectAll("ellipse").remove();
   redraw();
 }
 
@@ -213,6 +234,7 @@ function mousedown() {
   var m = d3.mouse(svg.node());
   dragged[0] = xMapInv(Math.max(0, Math.min(width, m[0])));
   dragged[1] = yMapInv(Math.max(0, Math.min(height, m[1])));
+  svg.selectAll("ellipse").remove();
   redraw();
 }
 
@@ -221,6 +243,7 @@ function mousemove() {
   var m = d3.mouse(svg.node());
   dragged[0] = xMapInv(Math.max(0, Math.min(width, m[0])));
   dragged[1] = yMapInv(Math.max(0, Math.min(height, m[1])));
+  svg.selectAll("ellipse").remove();
   redraw();
 }
 
@@ -238,28 +261,14 @@ function keydown() {
       var i = points.indexOf(selected);
       points.splice(i, 1);
       selected = points.length ? points[i > 0 ? i - 1 : 0] : null;
+      svg.selectAll("ellipse").remove();
       redraw();
       break;
     }
   }
 }
 
- function transition(){
-    circleBig.transition()
-    .duration(10000)
-    .attrTween('transform',tanslateAlong(path.node()))
-    .each('end',transition);
-  }
-  
-  function translateAlong(path){
-  var l=path.getTotalLength();
-  return function(t){
-    var p=path.getPointAtLength(t*l);
-    return 'translate('+p.x+','+p.y+')';
-  };
-  }
-
-      },
+},
 
       resize: function(width, height) {
 

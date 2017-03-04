@@ -1,6 +1,9 @@
 # fluidSpline
 
-Htmlwidget that binds [Spline Editor](https://bl.ocks.org/mbostock/4342190) by Mike Bostock to create an interactive object in Shiny. 
+Htmlwidget that binds of fork of [Spline Editor](https://bl.ocks.org/mbostock/4342190) by Mike Bostock to create an interactive object in Shiny. 
+
+
+![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineExampleAnimation.gif)
 
 ![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineExample.gif)
 

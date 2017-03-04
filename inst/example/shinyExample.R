@@ -4,8 +4,15 @@ server <- function(input, output) {
 
   network <- reactiveValues()
 
+  df<-reactive({
+    data.frame(Var1=1:20,Var2=sort(rexp(20),decreasing = T))
+  })
+  
   observeEvent(input$d3_update,{
     netNodes=input$d3_update$.pointsData
+    
+    pathSample=input$d3_update$.pathSample
+    
     network$nodes <- jsonlite::fromJSON(netNodes)
   })
 
@@ -18,11 +25,9 @@ server <- function(input, output) {
     })    
   })
 
-df<-reactive({
-  data.frame(Var1=1:10,Var2=sort(rexp(10),decreasing = T))
-})
+
   output$d3 <- renderFluidSpline({
-    isolate({fluidSpline(obj = df(),cW =     600,cH = 300)})
+    isolate({fluidSpline(obj = df(),cW = 600,cH = 800)})
   })
 }
 
