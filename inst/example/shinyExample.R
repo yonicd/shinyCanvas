@@ -10,9 +10,6 @@ server <- function(input, output) {
   
   observeEvent(input$d3_update,{
     netNodes=input$d3_update$.pointsData
-    
-    pathSample=input$d3_update$.pathSample
-    
     network$nodes <- jsonlite::fromJSON(netNodes)
   })
 
@@ -25,14 +22,16 @@ server <- function(input, output) {
     })    
   })
 
-
+  anim<-reactive({as.logical(input$anim)})
+  
   output$d3 <- renderFluidSpline({
-    isolate({fluidSpline(obj = df(),cW = 600,cH = 800)})
+    fluidSpline(obj = df(),animate = anim(),cW = 600,cH = 800)
   })
 }
 
 ui <- fluidPage(
   column(9,fluidSplineOutput(outputId="d3",width = '600px',height = '600px')),
+  radioButtons(inputId = 'anim',label = 'Turn on Animation',choices = c(0,1),selected = 0,inline = T),
   column(3,tableOutput('pointsOut'))
 )
 

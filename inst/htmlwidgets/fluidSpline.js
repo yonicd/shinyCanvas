@@ -20,13 +20,18 @@ HTMLWidgets.widget({
             aLabel.innerHTML = "Interpolate:";
         var aSelect=document.createElement("Select");
             aSelect.setAttribute("id", item);
-        /*var aButton = document. createElement("button");    
-            aButton. innerHTML = "Animate";*/
             
         el.appendChild(aForm);
         aForm.appendChild(aLabel);
         aForm.appendChild(aSelect);
-        //aForm.appendChild(aButton);
+        
+        /*      
+        var aButton = document. createElement("button");               aButton. innerHTML = "Animate"
+              aButton.value='Update';
+              aButton.onclick='transition()';
+              aForm.appendChild(aButton);
+        */
+        
         
         var margin={top:20,right:20,bottom:30,left:40};
         var width = x.width-margin.left-margin.right;
@@ -94,7 +99,7 @@ svg.append("path")
     .datum(points)
     .attr("class", "line")
     .call(redraw);
-
+    
 d3.select(window)
     .on("mousemove", mousemove)
     .on("mouseup", mouseup)
@@ -189,12 +194,14 @@ function redraw() {
       .ease("elastic")
       .attr("r", 2);
 
-  var circleBig = svg.append("ellipse")
+if(x.animate==1){
+var circleBig = svg.append("ellipse")
   .attr("rx", 10)
   .attr("ry", 10)
   .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
 
-transition();
+transition();}
+
 
 function transition() {
   circleBig.transition()

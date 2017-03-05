@@ -11,12 +11,13 @@
 #' @import htmlwidgets
 #'
 #' @export
-fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
+fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),animate=TRUE,cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
   x = list(
     data=obj,
     n=nrow(obj),
+    animate=animate,
     width=cW,
     height=cH
   )
