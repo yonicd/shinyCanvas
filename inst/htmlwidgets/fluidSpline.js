@@ -24,15 +24,7 @@ HTMLWidgets.widget({
         el.appendChild(aForm);
         aForm.appendChild(aLabel);
         aForm.appendChild(aSelect);
-        
-        /*      
-        var aButton = document. createElement("button");               aButton. innerHTML = "Animate"
-              aButton.value='Update';
-              aButton.onclick='transition()';
-              aForm.appendChild(aButton);
-        */
-        
-        
+
         var margin={top:20,right:20,bottom:30,left:40};
         var width = x.width-margin.left-margin.right;
         var height = x.height-margin.top-margin.bottom;
@@ -151,8 +143,101 @@ d3.select("#interpolate")
       .style("text-anchor", "end")
       .text(axisName[1]);   
 
-function redraw() {
+ var stp=0;
+ var pause=0; 
+ var pauseValues={
+    lastT:0,
+    currentT:0
+  };
   
+ var duration=10000;
+
+ function playButton(svg,x, y) {
+
+  var i=0;
+  
+	var button = svg.append("g")
+      .attr("transform", "translate("+ x +","+ y +")")
+      .datum(i)
+  		.attr('id', 'btnId' );
+   
+  button
+    .append("rect")
+      .attr("width", 25)
+      .attr("height", 25)
+      .attr("rx", 6)
+      .style("fill", "steelblue");
+
+  button
+    .append("path")
+		  .attr('id', 'pathId' )
+      .attr("d", "M5 5 L5 20 L20 13 Z")
+      .style("fill", "white");
+    
+  button
+      .on("mousedown", function() {
+        d3.select(this).select("rect")
+            .style("fill","white")
+            .transition().style("fill","steelblue");
+        i++;
+		stp++;
+		d3.select(this).datum(stp);
+    svg.selectAll("ellipse").remove();
+    redraw();
+      });
+      
+   if(stp%2===1){ 
+        button.select("path").attr("d", "M5 5 L20 5 L20 20 L5 20 Z");
+    }else{
+        button.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
+    }
+    
+} 
+
+
+function pauseButton(svg,x, y,transition){
+
+var i=0;
+  
+	var Pbutton = svg.append("g")
+      .attr("transform", "translate("+ x +","+ y +")")
+      .datum(i)
+  		.attr('id', 'PbtnId' );
+   
+  Pbutton
+    .append("rect")
+      .attr("width", 25)
+      .attr("height", 25)
+      .attr("rx", 6)
+      .style("fill", "steelblue");
+
+  Pbutton
+    .append("path")
+		  .attr('id', 'pathId' )
+      .attr("d", "M5 5 L10 5 L10 20 L5 20 M15 5 L20 5 L20 20 L15 20 Z")
+      .style("fill", "white");
+    
+  Pbutton
+      .on("mousedown", function() {
+        d3.select(this).select("rect")
+            .style("fill","white")
+            .transition().style("fill","steelblue");
+      pause++;
+      if(pause%2==1){
+       svg.selectAll("ellipse").transition().duration(0);
+       setTimeout(function() {
+         pauseValues.lastT=pauseValues.currentT;
+       }, 100);  
+       Pbutton.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
+      }else{
+        transition();
+        Pbutton.select("path").attr("d", "M5 5 L10 5 L10 20 L5 20 M15 5 L20 5 L20 20 L15 20 Z");
+      }
+      });
+}    
+
+function redraw() {
+
 	var path=svg.select("path").attr("d", line);
 
   var circle = svg.selectAll("circle").data(points);
@@ -195,30 +280,63 @@ function redraw() {
       .attr("r", 2);
 
 if(x.animate==1){
-var circleBig = svg.append("ellipse")
+  playButton(svg,width -margin.right-40 , margin.top-15);
+  if(stp%2==1){
+  pauseButton(svg,width -margin.right-10 , margin.top-15,function transition() {
+  if(circleBig){
+  circleBig.transition()
+      .duration(duration-(duration*pauseValues.lastT))
+      .attrTween("transform", translateAlong(path.node()))
+      .attr( "cy", 1 )
+      .each("end", function(){
+        pauseValues={
+          lastT:0,
+          currentT:0
+        };
+        transition();
+      });
+}
+});
+  var circleBig = svg.append("ellipse")
   .attr("rx", 10)
   .attr("ry", 10)
   .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
-
-transition();}
-
+  }else{
+    d3.select('#PbtnId').remove();
+  }
+}
 
 function transition() {
+  if(circleBig){
   circleBig.transition()
-      .duration(10000)
+      .duration(duration-(duration*pauseValues.lastT))
       .attrTween("transform", translateAlong(path.node()))
-      .each("end", transition);
+      .attr( "cy", 1 )
+      .each("end", function(){
+        pauseValues={
+          lastT:0,
+          currentT:0
+        };
+        transition();
+      });
 }
+}
+
+
 
 function translateAlong(path) {
   var l = path.getTotalLength();
   return function(d, i, a) {
     return function(t) {
+      t+=pauseValues.lastT;
       var p = path.getPointAtLength(t * l);
+      pauseValues.currentT=t;
       return "translate(" + p.x + "," + p.y + ")";
     };
   };
 } 
+
+transition();
 
  if(typeof(Shiny) !== "undefined"){
     Shiny.onInputChange(el.id + "_update",{

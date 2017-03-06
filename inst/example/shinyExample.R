@@ -22,16 +22,13 @@ server <- function(input, output) {
     })    
   })
 
-  anim<-reactive({as.logical(input$anim)})
-  
   output$d3 <- renderFluidSpline({
-    fluidSpline(obj = df(),animate = anim(),cW = 600,cH = 800)
+    isolate({fluidSpline(obj = df(),animate = T,cW = 600,cH = 800)})
   })
 }
 
 ui <- fluidPage(
   column(9,fluidSplineOutput(outputId="d3",width = '600px',height = '600px')),
-  radioButtons(inputId = 'anim',label = 'Turn on Animation',choices = c(0,1),selected = 0,inline = T),
   column(3,tableOutput('pointsOut'))
 )
 
