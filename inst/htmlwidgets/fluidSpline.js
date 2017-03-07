@@ -28,7 +28,18 @@ HTMLWidgets.widget({
         var margin={top:20,right:20,bottom:30,left:40};
         var width = x.width-margin.left-margin.right;
         var height = x.height-margin.top-margin.bottom;
-
+        var duration=x.duration;
+        var pathRadius=x.pathRadius;
+        
+         var stp=0;
+         var pause=0; 
+         var pauseValues={
+            lastT:0,
+            currentT:0
+          };
+          
+         
+        var pathpoints={x:[],y:[]};  
  //var points= [[5,3], [10,10], [15,4], [2,8]];
  var data = x.data; 
  var axisName=Object.keys(data);
@@ -143,16 +154,7 @@ d3.select("#interpolate")
       .style("text-anchor", "end")
       .text(axisName[1]);   
 
- var stp=0;
- var pause=0; 
- var pauseValues={
-    lastT:0,
-    currentT:0
-  };
-  
- var duration=10000;
-
- function playButton(svg,x, y) {
+function playButton(svg,x, y) {
 
   var i=0;
   
@@ -187,21 +189,23 @@ d3.select("#interpolate")
       });
       
    if(stp%2===1){ 
+     pauseValues.lastT=pauseValues.currentT=0;
+     pause=0;
+     //console.log(pauseValues);
         button.select("path").attr("d", "M5 5 L20 5 L20 20 L5 20 Z");
     }else{
+      //console.log(pauseValues);
         button.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
     }
     
 } 
-
-
 function pauseButton(svg,x, y,transition){
 
 var i=0;
   
 	var Pbutton = svg.append("g")
       .attr("transform", "translate("+ x +","+ y +")")
-      .datum(i)
+      .datum(pauseValues)
   		.attr('id', 'PbtnId' );
    
   Pbutton
@@ -224,12 +228,14 @@ var i=0;
             .transition().style("fill","steelblue");
       pause++;
       if(pause%2==1){
+        console.log(pauseValues);
        svg.selectAll("ellipse").transition().duration(0);
        setTimeout(function() {
          pauseValues.lastT=pauseValues.currentT;
        }, 100);  
        Pbutton.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
       }else{
+        console.log(pauseValues);
         transition();
         Pbutton.select("path").attr("d", "M5 5 L10 5 L10 20 L5 20 M15 5 L20 5 L20 20 L15 20 Z");
       }
@@ -252,7 +258,7 @@ function redraw() {
                .style("opacity", 0.9);
     
     
-  tooltip.html("(" + d3.round(xValue(d),1) + ", " + 		d3.round(yValue(d),1) + ")")
+  tooltip.html("(" + d3.round(xValue(d),1) + ", " + d3.round(yValue(d),1) + ")")
     .style("left", (d3.event.pageX) + "px")
     .style("top", (d3.event.pageY) + "px");
       })
@@ -281,8 +287,10 @@ function redraw() {
 
 if(x.animate==1){
   playButton(svg,width -margin.right-40 , margin.top-15);
+  console.log(pauseValues);
+  console.log('pause:'+pause);
   if(stp%2==1){
-  pauseButton(svg,width -margin.right-10 , margin.top-15,function transition() {
+  pauseButton(svg,width -margin.right-10 , margin.top-15,function() {
   if(circleBig){
   circleBig.transition()
       .duration(duration-(duration*pauseValues.lastT))
@@ -293,15 +301,16 @@ if(x.animate==1){
           lastT:0,
           currentT:0
         };
-        transition();
+        if(x.loop==1) transition();
       });
 }
 });
   var circleBig = svg.append("ellipse")
-  .attr("rx", 10)
-  .attr("ry", 10)
+  .attr("rx", pathRadius)
+  .attr("ry", pathRadius)
   .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
   }else{
+  console.log('pause:'+pause);
     d3.select('#PbtnId').remove();
   }
 }
@@ -317,12 +326,11 @@ function transition() {
           lastT:0,
           currentT:0
         };
-        transition();
+        pathpoints={x:[],y:[]};
+        if(x.loop==1) transition();
       });
 }
 }
-
-
 
 function translateAlong(path) {
   var l = path.getTotalLength();
@@ -330,7 +338,15 @@ function translateAlong(path) {
     return function(t) {
       t+=pauseValues.lastT;
       var p = path.getPointAtLength(t * l);
+      pathpoints.x.splice(1,0,xMapInv(p.x));
+      pathpoints.y.splice(1,0,yMapInv(p.y));
+      console.log(pathpoints);
       pauseValues.currentT=t;
+      
+       if(typeof(Shiny) !== "undefined"){
+    Shiny.onInputChange(el.id + "_update",{".pathData": JSON.stringify(pathpoints)});
+ }
+      
       return "translate(" + p.x + "," + p.y + ")";
     };
   };
@@ -339,9 +355,7 @@ function translateAlong(path) {
 transition();
 
  if(typeof(Shiny) !== "undefined"){
-    Shiny.onInputChange(el.id + "_update",{
-      ".pointsData": JSON.stringify(points)
-    });
+    Shiny.onInputChange(el.id + "_update",{".pointsData": JSON.stringify(points)});
  }
 
 }
@@ -392,10 +406,9 @@ function keydown() {
     }
   }
 }
-
 },
 
-      resize: function(width, height) {
+resize: function(width, height) {
 
         // TODO: code to re-render the widget with a new size
 

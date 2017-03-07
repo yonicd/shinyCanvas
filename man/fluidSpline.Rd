@@ -4,18 +4,29 @@
 \alias{fluidSpline}
 \title{fluidSpline}
 \usage{
-fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), cW = 1000,
-  cH = 500, width = NULL, height = NULL, elementId = NULL)
+fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), animate = FALSE,
+  animate.opts = NULL, cW = 1000, cH = 500, width = NULL,
+  height = NULL, elementId = NULL)
 }
 \arguments{
 \item{obj}{data.frame that contains coordinates x,y}
 
+\item{animate}{boolean that controls if there is animation in widget}
+
 \item{cW}{numeric plot width in px}
 
 \item{cH}{numeric plot height in px}
+
+\item{animation.opts}{list that contains options to control animation, see details}
 }
 \description{
 Htmlwidget that allows users to interact with locations of points on a plot
+}
+\details{
+animation options include duration which is the speed which the animation moves (default 10000ms). 
+When deploying a shiny app the number of samples taken from the path is a function of the size of the duration.
+and loop if set to TRUE (default FALSE) automatically restarts the animation when it reaches the end.
+pathRadius set the size of the circle that moves along the interpolated curve.
 }
 \examples{
 if(interactive()) fluidSpline()
