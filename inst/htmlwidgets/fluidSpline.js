@@ -301,6 +301,7 @@ if(x.animate==1){
           lastT:0,
           currentT:0
         };
+        pathpoints={x:[],y:[]};
         if(x.loop==1) transition();
       });
 }
@@ -338,9 +339,8 @@ function translateAlong(path) {
     return function(t) {
       t+=pauseValues.lastT;
       var p = path.getPointAtLength(t * l);
-      pathpoints.x.splice(1,0,xMapInv(p.x));
-      pathpoints.y.splice(1,0,yMapInv(p.y));
-      console.log(pathpoints);
+      pathpoints.x.push(xMapInv(p.x));
+      pathpoints.y.push(yMapInv(p.y));
       pauseValues.currentT=t;
       
        if(typeof(Shiny) !== "undefined"){

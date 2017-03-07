@@ -27,7 +27,7 @@ server <- function(input, output) {
 
   observeEvent(network$path,{
     output$pathOut<-renderTable({
-      dat=data.frame(network$path)
+      dat=as.data.frame(network$path)
       colnames(dat)=names(df())
       dat=data.frame(Id=1:nrow(dat),dat)
       dat
@@ -36,7 +36,7 @@ server <- function(input, output) {
   
   output$d3 <- renderFluidSpline({
     isolate({fluidSpline(obj = df(),animate = T,
-                         animate.opts = list(duration=1000,pathRadius=5),
+                         animate.opts = list(duration=500,pathRadius=5),
                          cW = 400,cH = 400)})
   })
 }
