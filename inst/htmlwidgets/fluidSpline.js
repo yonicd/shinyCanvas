@@ -154,96 +154,12 @@ d3.select("#interpolate")
       .style("text-anchor", "end")
       .text(axisName[1]);   
 
-function playButton(svg,x, y) {
-
-  var i=0;
-  
-	var button = svg.append("g")
-      .attr("transform", "translate("+ x +","+ y +")")
-      .datum(i)
-  		.attr('id', 'btnId' );
-   
-  button
-    .append("rect")
-      .attr("width", 25)
-      .attr("height", 25)
-      .attr("rx", 6)
-      .style("fill", "steelblue");
-
-  button
-    .append("path")
-		  .attr('id', 'pathId' )
-      .attr("d", "M5 5 L5 20 L20 13 Z")
-      .style("fill", "white");
-    
-  button
-      .on("mousedown", function() {
-        d3.select(this).select("rect")
-            .style("fill","white")
-            .transition().style("fill","steelblue");
-        i++;
-		stp++;
-		d3.select(this).datum(stp);
-    svg.selectAll("ellipse").remove();
-    redraw();
-      });
-      
-   if(stp%2===1){ 
-     pauseValues.lastT=pauseValues.currentT=0;
-     pause=0;
-     //console.log(pauseValues);
-        button.select("path").attr("d", "M5 5 L20 5 L20 20 L5 20 Z");
-    }else{
-      //console.log(pauseValues);
-        button.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
-    }
-    
-} 
-function pauseButton(svg,x, y,transition){
-
-var i=0;
-  
-	var Pbutton = svg.append("g")
-      .attr("transform", "translate("+ x +","+ y +")")
-      .datum(pauseValues)
-  		.attr('id', 'PbtnId' );
-   
-  Pbutton
-    .append("rect")
-      .attr("width", 25)
-      .attr("height", 25)
-      .attr("rx", 6)
-      .style("fill", "steelblue");
-
-  Pbutton
-    .append("path")
-		  .attr('id', 'pathId' )
-      .attr("d", "M5 5 L10 5 L10 20 L5 20 M15 5 L20 5 L20 20 L15 20 Z")
-      .style("fill", "white");
-    
-  Pbutton
-      .on("mousedown", function() {
-        d3.select(this).select("rect")
-            .style("fill","white")
-            .transition().style("fill","steelblue");
-      pause++;
-      if(pause%2==1){
-        console.log(pauseValues);
-       svg.selectAll("ellipse").transition().duration(0);
-       setTimeout(function() {
-         pauseValues.lastT=pauseValues.currentT;
-       }, 100);  
-       Pbutton.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
-      }else{
-        console.log(pauseValues);
-        transition();
-        Pbutton.select("path").attr("d", "M5 5 L10 5 L10 20 L5 20 M15 5 L20 5 L20 20 L15 20 Z");
-      }
-      });
-}    
-
 function redraw() {
-
+   var pauseValues = {
+          lastT: 0,
+          currentT: 0
+      };
+        
 	var path=svg.select("path").attr("d", line);
 
   var circle = svg.selectAll("circle").data(points);
@@ -284,75 +200,92 @@ function redraw() {
       .duration(750)
       .ease("elastic")
       .attr("r", 2);
-
-if(x.animate==1){
-  playButton(svg,width -margin.right-40 , margin.top-15);
-  console.log(pauseValues);
-  console.log('pause:'+pause);
-  if(stp%2==1){
-  pauseButton(svg,width -margin.right-10 , margin.top-15,function() {
-  if(circleBig){
-  circleBig.transition()
-      .duration(duration-(duration*pauseValues.lastT))
-      .attrTween("transform", translateAlong(path.node()))
-      .attr( "cy", 1 )
-      .each("end", function(){
-        pauseValues={
-          lastT:0,
-          currentT:0
-        };
-        pathpoints={x:[],y:[]};
-        if(x.loop==1) transition();
-      });
-}
-});
-  var circleBig = svg.append("ellipse")
-  .attr("rx", pathRadius)
-  .attr("ry", pathRadius)
-  .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
-  }else{
-  console.log('pause:'+pause);
-    d3.select('#PbtnId').remove();
-  }
-}
-
 function transition() {
-  if(circleBig){
-  circleBig.transition()
-      .duration(duration-(duration*pauseValues.lastT))
-      .attrTween("transform", translateAlong(path.node()))
-      .attr( "cy", 1 )
+			svg.selectAll('ellipse').transition()
+      .duration(duration - (duration * pauseValues.lastT))
+      .attrTween("transform", translateAlong(svg.selectAll('path').node()))
       .each("end", function(){
-        pauseValues={
-          lastT:0,
-          currentT:0
+       pauseValues = {
+          lastT: 0,
+          currentT: 0
         };
         pathpoints={x:[],y:[]};
         if(x.loop==1) transition();
       });
 }
-}
-
+  
 function translateAlong(path) {
   var l = path.getTotalLength();
+
   return function(d, i, a) {
     return function(t) {
-      t+=pauseValues.lastT;
+      t += pauseValues.lastT;
       var p = path.getPointAtLength(t * l);
       pathpoints.x.push(xMapInv(p.x));
       pathpoints.y.push(yMapInv(p.y));
-      pauseValues.currentT=t;
-      
+      pauseValues.currentT = t;
+            
        if(typeof(Shiny) !== "undefined"){
     Shiny.onInputChange(el.id + "_update",{".pathData": JSON.stringify(pathpoints)});
  }
-      
+  
       return "translate(" + p.x + "," + p.y + ")";
     };
   };
-} 
+}
 
-transition();
+if(x.animate==1){
+var pause =0;
+var duration=x.duration;    
+
+var circleBig = svg.append("ellipse")
+  .attr("rx", 5)
+  .attr("ry", 5)
+  .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
+
+  pauseButton(svg,width -margin.right-10 , margin.top-15);  
+}
+  
+  
+function pauseButton(svg,x, y){
+
+	var Pbutton = svg.append("g")
+      .attr("transform", "translate("+ x +","+ y +")")
+  		.attr('id', 'PbtnId' );
+   
+  Pbutton
+    .append("rect")
+      .attr("width", 25)
+      .attr("height", 25)
+      .attr("rx", 6)
+      .style("fill", "steelblue");
+
+  Pbutton
+    .append("path")
+		  .attr('id', 'pathId' )
+      .attr("d", "M5 5 L5 20 L20 13 Z")
+      .style("fill", "white");
+    
+  Pbutton
+      .on("mousedown", function() {
+        d3.select(this).select("rect")
+            .style("fill","white")
+            .transition().style("fill","steelblue");
+      pause++;
+      if(pause%2==0){
+ svg.selectAll("ellipse").transition().duration(0);
+       setTimeout(function() {
+         pauseValues.lastT=pauseValues.currentT;
+       }, 100);
+        Pbutton.select("path").attr("d", "M5 5 L5 20 L20 13 Z");
+       
+      }else{
+        Pbutton.select("path").attr("d", "M5 5 L10 5 L10 20 L5 20 M15 5 L20 5 L20 20 L15 20 Z");
+        transition();
+        
+      }
+      });
+}  
 
  if(typeof(Shiny) !== "undefined"){
     Shiny.onInputChange(el.id + "_update",{".pointsData": JSON.stringify(points)});
