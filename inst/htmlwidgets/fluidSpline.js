@@ -12,7 +12,7 @@ HTMLWidgets.widget({
 
       renderValue: function(x) {
 
-//Setup
+//Setup 
         var item='interpolate';
         var aForm=document.createElement("Form");
         var aLabel = document.createElement("Label");
