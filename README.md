@@ -22,7 +22,7 @@ The user inputs a data.frame that contains corrdinates x,y and then can:
 ```
 fluidSpline()
 
-fluidSpline(obj = data.frame(x=1:10,y=runif(10)),cW = 700,cH = 300)
+fluidSpline(obj = data.frame(x=1:10,y=runif(10)))
 ```
 
 ##Usage in a Shiny app
