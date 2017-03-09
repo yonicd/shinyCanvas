@@ -36,15 +36,21 @@ server <- function(input, output) {
   
   output$d3 <- renderFluidSpline({
     isolate({fluidSpline(obj = df(),animate = T,
-                         animate.opts = list(duration=500,pathRadius=5),
+                         animate.opts = list(duration=500,pathRadius=10),
                          cW = 400,cH = 400)})
   })
 }
 
 ui <- fluidPage(
-  column(9,fluidSplineOutput(outputId="d3",width = '600px',height = '600px')),
-  column(3,tableOutput('pointsOut')),
-  column(3,tableOutput('pathOut'))
+  column(6,fluidSplineOutput(outputId="d3")),
+  column(3,
+         p('Plot Points'),
+         tableOutput('pointsOut')
+         ),
+  column(3,
+         p('Path Sample'),
+         tableOutput('pathOut')
+         )
 )
 
 shinyApp(ui = ui, server = server)

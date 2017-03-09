@@ -1,6 +1,7 @@
   require(fluidSpline)
   require(survival)
-
+  require(broom)
+  
   server <- function(input, output) {
   
   network <- reactiveValues()
