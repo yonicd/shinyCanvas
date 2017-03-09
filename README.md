@@ -2,9 +2,7 @@
 
 Htmlwidget that binds a fork of [Spline Editor](https://bl.ocks.org/mbostock/4342190) by Mike Bostock to create an interactive object in Shiny. 
 
-
-<iframe src="https://bl.ocks.org/yonicd/raw/4bc59fca901388ebe4905bdb19af1567/" marginwidth="0" marginheight="0" scrolling="no"></iframe>
-
+<iframe width="854" height="480"  src="https://bl.ocks.org/yonicd/raw/4bc59fca901388ebe4905bdb19af1567/" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 
 ![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineAnimation.gif)
 
