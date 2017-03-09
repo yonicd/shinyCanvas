@@ -16,7 +16,7 @@ The user inputs a data.frame that contains corrdinates x,y and then can:
   - add/remove points to the plot
   - change position of the points
   - change the type of interpolation between points
-
+  - run animation on the interpolated curve to collect a sample from it
 
 ##Usage as an htmlwidget in the Rstudio viewer
 ```
@@ -29,9 +29,17 @@ fluidSpline(obj = data.frame(x=1:10,y=runif(10)),cW = 700,cH = 300)
 
 When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
-Click Picture to see Youtube Video
+###Click Pictures to see Youtube Videos
+
+####Basic Usage:
+
+Script to run example below
 
 [![fluidSpline in Shiny](http://img.youtube.com/vi/obfjcYty7vk/0.jpg)](https://www.youtube.com/watch?v=obfjcYty7vk)
+
+#####Survival Analysis Example:
+
+[![Bivariate Slider in Shiny](http://img.youtube.com/vi/56Ee_2MdptI/0.jpg)](https://www.youtube.com/watch?v=56Ee_2MdptI)
 
 ```
 library(fluidSpline)
