@@ -7,9 +7,10 @@
 #' @param ylim numeric vector containing the minimum and maximum values of the y axis, if NULL limits will be set automatically
 #' @param animate boolean that controls if there is animation in widget
 #' @param animation.opts list that contains options to control animation, see details
-#' @param cW numeric plot width in px (default 1000px)
-#' @param cH numeric plot height in px (default 500px)
-#'
+#' @param width,height Must be a valid CSS unit (like \code{'100\%'},
+#'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
+#'   string and have \code{'px'} appended.
+#'   
 #' @details animation options include duration which is the speed which the animation moves (default 10000ms). 
 #' When deploying a shiny app the number of samples taken from the path is a function of the size of the duration.
 #' and loop if set to TRUE (default FALSE) automatically restarts the animation when it reaches the end.
@@ -20,7 +21,7 @@
 #' @import htmlwidgets
 #'
 #' @export
-fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),xlim=NULL,ylim=NULL,animate=FALSE,animate.opts=NULL,cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
+fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),xlim=NULL,ylim=NULL,animate=FALSE,animate.opts=NULL, width = NULL, height = NULL, elementId = NULL) {
 
 
   
@@ -31,9 +32,7 @@ fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),xlim=NULL,ylim=NULL,a
     animate=animate,
     loop=FALSE,
     duration=10000,
-    pathRadius=10,
-    width=cW,
-    height=cH
+    pathRadius=10
   )
 
   if(!is.null(xlim)) x$xlim=xlim
@@ -52,6 +51,7 @@ fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),xlim=NULL,ylim=NULL,a
     x,
     width = width,
     height = height,
+    htmlwidgets::sizingPolicy(padding = 10, browser.fill = TRUE),
     package = 'fluidSpline',
     elementId = elementId
   )

@@ -26,8 +26,8 @@ HTMLWidgets.widget({
         aForm.appendChild(aSelect);
 
         var margin={top:20,right:20,bottom:30,left:40};
-        var width = x.width-margin.left-margin.right;
-        var height = x.height-margin.top-margin.bottom;
+        var widthSVG = width-margin.left-margin.right;
+        var heightSVG = height-margin.top-margin.bottom;
         var duration=x.duration;
         var pathRadius=x.pathRadius;
         
@@ -61,7 +61,7 @@ HTMLWidgets.widget({
   
   var xScale = d3.scale.linear()
   							.domain([xmin, xmax])
-                .range([ 0, width ]),
+                .range([ 0, widthSVG ]),
                 
       xMap = function(d) { return xScale(xValue(d));}, // data -> display
       xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -79,17 +79,17 @@ HTMLWidgets.widget({
   
   var yScale = d3.scale.linear()
   						.domain([ymin, ymax])
-      	      .range([ height, 0 ]), // value -> display
+      	      .range([ heightSVG, 0 ]), // value -> display
       yMap = function(d) { return yScale(yValue(d));}, // data -> display
       yAxis = d3.svg.axis().scale(yScale).orient("left");  
   
   var xScaleInv = d3.scale.linear()
   							.range([xmin, xmax])
-                .domain([ 0, width ]),
+                .domain([ 0, widthSVG ]),
     xMapInv = function(d) { return xScaleInv(d);},
     yScaleInv = d3.scale.linear()
   							.range([ymin, ymax])
-      	      .domain([ height, 0 ]),
+      	      .domain([ heightSVG, 0 ]),
     yMapInv = function(d) { return yScaleInv(d);};
     
 // add the tooltip area to the webpage
@@ -105,14 +105,14 @@ var line = d3.svg.line()
 .y(function(d) { return yMap(d); });
 
 var svg = d3.select(el).append("svg")
-    .attr("width", width+margin.left+margin.right)
-    .attr("height", height+margin.top+margin.bottom).append("g")
+    .attr("width", widthSVG+margin.left+margin.right)
+    .attr("height", heightSVG+margin.top+margin.bottom).append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr("tabindex", 1);
   
 svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", widthSVG)
+    .attr("height", heightSVG)
     .on("mousedown", mousedown);
 
 svg.append("path")
@@ -149,11 +149,11 @@ d3.select("#interpolate")
   // x-axis
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + heightSVG + ")")
       .call(xAxis)
     .append("text")
       .attr("class", "label")
-      .attr("x", width)
+      .attr("x", widthSVG)
       .attr("y", -6)
       .style("text-anchor", "end")
       .text(axisName[0]);
@@ -260,7 +260,7 @@ var circleBig = svg.append("ellipse")
   .attr("ry", 5)
   .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
 
-  pauseButton(svg,width -margin.right-10 , margin.top-15);  
+  pauseButton(svg,widthSVG -margin.right-10 , margin.top-15);  
 }
   
   
@@ -321,8 +321,8 @@ function change() {
 function mousedown() {
   points.push(selected = dragged = d3.mouse(svg.node()));
   var m = d3.mouse(svg.node());
-  dragged[0] = xMapInv(Math.max(0, Math.min(width, m[0])));
-  dragged[1] = yMapInv(Math.max(0, Math.min(height, m[1])));
+  dragged[0] = xMapInv(Math.max(0, Math.min(widthSVG, m[0])));
+  dragged[1] = yMapInv(Math.max(0, Math.min(heightSVG, m[1])));
   svg.selectAll("ellipse").remove();
   redraw();
 }
@@ -330,8 +330,8 @@ function mousedown() {
 function mousemove() {
   if (!dragged) return;
   var m = d3.mouse(svg.node());
-  dragged[0] = xMapInv(Math.max(0, Math.min(width, m[0])));
-  dragged[1] = yMapInv(Math.max(0, Math.min(height, m[1])));
+  dragged[0] = xMapInv(Math.max(0, Math.min(widthSVG, m[0])));
+  dragged[1] = yMapInv(Math.max(0, Math.min(heightSVG, m[1])));
   svg.selectAll("ellipse").remove();
   redraw();
 }
@@ -360,8 +360,10 @@ function keydown() {
 
 resize: function(width, height) {
 
-        // TODO: code to re-render the widget with a new size
-
+        d3.select(el).select("svg")
+        .attr("width", width)
+        .attr("height", height);
+        
       }
 
     };

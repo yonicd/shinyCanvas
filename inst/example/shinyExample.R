@@ -36,8 +36,7 @@ server <- function(input, output) {
   
   output$d3 <- renderFluidSpline({
     isolate({fluidSpline(obj = df(),animate = T,
-                         animate.opts = list(duration=500,pathRadius=10),
-                         cW = 400,cH = 400)})
+                         animate.opts = list(duration=500,pathRadius=10))})
   })
 }
 

@@ -40,8 +40,7 @@
 
     
     isolate({fluidSpline(obj = ys.df(),animate = T,ylim=c(0,1.1),
-                         animate.opts = list(duration=500,pathRadius=10),
-                         cW = 400,cH = 400)})
+                         animate.opts = list(duration=500,pathRadius=10))})
   })
   
   failures <-reactive({
