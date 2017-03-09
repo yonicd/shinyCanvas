@@ -6,9 +6,9 @@ For an interactive bl.ock page to try the d3js code go to [here](https://bl.ocks
 
 <iframe src="https://vida.io/gists/zNyrLzwmWNQgKGDmd/index.html" seamless frameborder="0" width="968" height="516"></iframe>
 
-![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineAnimation.gif)
+<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineExample.gif" "width="100" height="100"/>
 
-![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineExample.gif)
+
 
 
 The user inputs a data.frame that contains corrdinates x,y and then can:
