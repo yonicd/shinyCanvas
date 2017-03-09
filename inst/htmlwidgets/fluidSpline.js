@@ -48,30 +48,47 @@ HTMLWidgets.widget({
         });
  var pointsFloat = points[0];
  
- 
 // setup x 
-  var xValue = function(d) { return d[0];}, // data -> value
-      xScale = d3.scale.linear()
-  							.domain([d3.min(points, xValue)-1, d3.max(points, xValue)+1])
+  var xValue = function(d) { return d[0];}; // data -> value
+  
+  var xmin=d3.min(points, xValue)-1;
+  var xmax=d3.max(points, xValue)+1; 
+ 
+  if(x.xlim){
+    xmin=x.xlim[0];
+    xmax=x.xlim[1];
+  }
+  
+  var xScale = d3.scale.linear()
+  							.domain([xmin, xmax])
                 .range([ 0, width ]),
                 
       xMap = function(d) { return xScale(xValue(d));}, // data -> display
       xAxis = d3.svg.axis().scale(xScale).orient("bottom");
   
   // setup y
-  var yValue = function(d) { return d[1];}, // data -> value
-      yScale = d3.scale.linear()
-  						.domain([d3.min(points, yValue)-1, d3.max(points, yValue)+1])
+  var yValue = function(d) { return d[1];}; // data -> value
+  
+  var ymin=d3.min(points, yValue)-1;
+  var ymax=d3.max(points, yValue)+1; 
+ 
+  if(x.ylim){
+    ymin=x.ylim[0];
+    ymax=x.ylim[1];
+  }
+  
+  var yScale = d3.scale.linear()
+  						.domain([ymin, ymax])
       	      .range([ height, 0 ]), // value -> display
       yMap = function(d) { return yScale(yValue(d));}, // data -> display
       yAxis = d3.svg.axis().scale(yScale).orient("left");  
   
   var xScaleInv = d3.scale.linear()
-  							.range([d3.min(points, xValue)-1, d3.max(points, xValue)+1])
+  							.range([xmin, xmax])
                 .domain([ 0, width ]),
     xMapInv = function(d) { return xScaleInv(d);},
     yScaleInv = d3.scale.linear()
-  							.range([d3.min(points, yValue)-1, d3.max(points, yValue)+1])
+  							.range([ymin, ymax])
       	      .domain([ height, 0 ]),
     yMapInv = function(d) { return yScaleInv(d);};
     

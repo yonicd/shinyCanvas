@@ -4,18 +4,22 @@
 \alias{fluidSpline}
 \title{fluidSpline}
 \usage{
-fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), animate = FALSE,
-  animate.opts = NULL, cW = 1000, cH = 500, width = NULL,
-  height = NULL, elementId = NULL)
+fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), xlim = NULL,
+  ylim = NULL, animate = FALSE, animate.opts = NULL, cW = 1000,
+  cH = 500, width = NULL, height = NULL, elementId = NULL)
 }
 \arguments{
 \item{obj}{data.frame that contains coordinates x,y}
 
+\item{xlim}{numeric vector containing the minimum and maximum values of the x axis, if NULL limits will be set automatically}
+
+\item{ylim}{numeric vector containing the minimum and maximum values of the y axis, if NULL limits will be set automatically}
+
 \item{animate}{boolean that controls if there is animation in widget}
 
-\item{cW}{numeric plot width in px}
+\item{cW}{numeric plot width in px (default 1000px)}
 
-\item{cH}{numeric plot height in px}
+\item{cH}{numeric plot height in px (default 500px)}
 
 \item{animation.opts}{list that contains options to control animation, see details}
 }

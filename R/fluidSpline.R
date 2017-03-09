@@ -3,10 +3,12 @@
 #' @description Htmlwidget that allows users to interact with locations of points on a plot
 #' 
 #' @param obj data.frame that contains coordinates x,y
+#' @param xlim numeric vector containing the minimum and maximum values of the x axis, if NULL limits will be set automatically
+#' @param ylim numeric vector containing the minimum and maximum values of the y axis, if NULL limits will be set automatically
 #' @param animate boolean that controls if there is animation in widget
 #' @param animation.opts list that contains options to control animation, see details
-#' @param cW numeric plot width in px
-#' @param cH numeric plot height in px
+#' @param cW numeric plot width in px (default 1000px)
+#' @param cH numeric plot height in px (default 500px)
 #'
 #' @details animation options include duration which is the speed which the animation moves (default 10000ms). 
 #' When deploying a shiny app the number of samples taken from the path is a function of the size of the duration.
@@ -18,7 +20,7 @@
 #' @import htmlwidgets
 #'
 #' @export
-fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),animate=FALSE,animate.opts=NULL,cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
+fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),xlim=NULL,ylim=NULL,animate=FALSE,animate.opts=NULL,cW=1000,cH=500, width = NULL, height = NULL, elementId = NULL) {
 
 
   
@@ -34,6 +36,9 @@ fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),animate=FALSE,animate
     height=cH
   )
 
+  if(!is.null(xlim)) x$xlim=xlim
+  if(!is.null(ylim)) x$ylim=ylim
+  
   if(animate){
     if(!is.null(animate.opts)){
       nm=names(animate.opts)
