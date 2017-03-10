@@ -1,11 +1,13 @@
 library(fluidSpline)
 library(shiny)
+
+
 server <- function(input, output) {
 
   network <- reactiveValues()
 
   df<-reactive({
-    data.frame(Var1=1:10,Var2=sort(rexp(10),decreasing = T))
+    data.frame(x=seq(-4,4,.1),prob=dnorm(seq(-4,4,.1), mean =0, sd = 1))
   })
   
   observeEvent(input$d3_update,{
@@ -25,31 +27,77 @@ server <- function(input, output) {
     })    
   })
 
-  observeEvent(network$path,{
-    output$pathOut<-renderTable({
-      dat=as.data.frame(network$path)
-      colnames(dat)=names(df())
-      dat=data.frame(Id=1:nrow(dat),dat)
-      dat
-    })    
-  })
+  # observeEvent(network$path,{
+  #   output$pathOut<-renderTable({
+  #     dat=as.data.frame(network$path)
+  #     colnames(dat)=names(df())
+  #     dat=data.frame(Id=1:nrow(dat),dat)
+  #     dat
+  #   })    
+  # })
   
   output$d3 <- renderFluidSpline({
     isolate({fluidSpline(obj = df(),animate = T,
-                         animate.opts = list(duration=500,pathRadius=10))})
+                         animate.opts = list(duration=5000,pathRadius=10),
+                         xlim = c(-4.1,4.1),ylim=c(0,.5))})
   })
+
+  samp<-eventReactive(input$btn,{
+    dat=as.data.frame(network$path)
+    colnames(dat)=names(df())
+    sort(sample(dat$x,size = 10000,replace = T,prob = dat$prob))
+  })
+  
+  newEstDF<-eventReactive(input$btn,{
+    x<-samp()
+    LL <- function(mu, sigma) {
+      R = suppressWarnings(dnorm(x, mu, sigma))
+      -sum(log(R))
+    }    
+    
+    out=mle(LL, start = list(mu = 0, sigma=1))
+    data.frame(signif(t(out@coef),2))
+  })
+  
+  pts<-eventReactive(input$btn,{
+    points(network$path,col='red',pch=20,cex=1)
+  })
+  
+  output$plotCompare<-renderPlot({
+    curve(dnorm(x, mean =0, sd = 1),
+          from=-4, to=4, col="blue",
+          xlab="X", ylab="Probability Density",
+          ylim=c(0,0.5),
+          main=sprintf('Initial N(0,1) \n Sample N(%s,%s)',newEstDF()$mu,newEstDF()$sigma))
+    par(new = TRUE)
+    curve(dnorm(x, mean =newEstDF()$mu, sd = newEstDF()$sigma),
+          from=-4, to=4, col="red",xlab='',ylab='',
+          ylim=c(0,0.5))
+    pts()
+    
+    
+  })
+
+  output$scatterPlot<-renderPlot({
+    plot(samp())
+  })
+  
 }
 
 ui <- fluidPage(
-  column(6,fluidSplineOutput(outputId="d3")),
+  column(6,
+         fluidSplineOutput(outputId="d3"),
+         actionButton(inputId = 'btn',label = 'Estimate Parameters'),
+         plotOutput('plotCompare')
+  ),
   column(3,
          p('Plot Points'),
          tableOutput('pointsOut')
-         ),
-  column(3,
-         p('Path Sample'),
-         tableOutput('pathOut')
          )
+  # column(3,
+  #        p('Path Sample'),
+  #        tableOutput('pathOut')
+  #        )
 )
 
 shinyApp(ui = ui, server = server)

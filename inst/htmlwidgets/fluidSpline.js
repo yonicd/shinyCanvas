@@ -256,8 +256,8 @@ var pause =0;
 var duration=x.duration;    
 
 var circleBig = svg.append("ellipse")
-  .attr("rx", 5)
-  .attr("ry", 5)
+  .attr("rx", x.pathRadius)
+  .attr("ry", x.pathRadius)
   .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
 
   pauseButton(svg,widthSVG -margin.right-10 , margin.top-15);  
