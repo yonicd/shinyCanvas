@@ -11,7 +11,8 @@
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
 #'   
-#' @details animation options include duration which is the speed which the animation moves (default 10000ms). 
+#' @details options to pass to server side includes:animation, animation duration, animation ease, animation radius,
+#'   duration which is the speed which the animation moves (default 10000ms). 
 #' When deploying a shiny app the number of samples taken from the path is a function of the size of the duration.
 #' and loop if set to TRUE (default FALSE) automatically restarts the animation when it reaches the end.
 #' pathRadius set the size of the circle that moves along the interpolated curve.
@@ -21,29 +22,21 @@
 #' @import htmlwidgets
 #'
 #' @export
-fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),xlim=NULL,ylim=NULL,animate=FALSE,animate.opts=NULL, width = NULL, height = NULL, elementId = NULL) {
+fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),opts=NULL, width = NULL, height = NULL, elementId = NULL) {
 
 
   
   # forward options using x
   x = list(
     data=obj,
-    n=nrow(obj),
-    animate=animate,
-    loop=FALSE,
-    duration=10000,
-    pathRadius=10
+    n=nrow(obj)
   )
 
-  if(!is.null(xlim)) x$xlim=xlim
-  if(!is.null(ylim)) x$ylim=ylim
-  
-  if(animate){
-    if(!is.null(animate.opts)){
-      nm=names(animate.opts)
-      for(i in nm) x[[i]]=animate.opts[[i]]
+    if(!is.null(opts)){
+      nm=names(opts)
+      for(i in nm) x[[i]]=opts[[i]]
     }
-    }
+
   
   # create widget
   htmlwidgets::createWidget(

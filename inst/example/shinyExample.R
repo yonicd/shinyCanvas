@@ -7,7 +7,7 @@ server <- function(input, output) {
   network <- reactiveValues()
 
   df<-reactive({
-    data.frame(x=seq(-4,4,.1),prob=dnorm(seq(-4,4,.1), mean =0, sd = 1))
+    data.frame(x=seq(-5,5,.3),prob=dnorm(seq(-5,5,.3), mean =0, sd = 1))
   })
   
   observeEvent(input$d3_update,{
@@ -37,15 +37,21 @@ server <- function(input, output) {
   # })
   
   output$d3 <- renderFluidSpline({
-    isolate({fluidSpline(obj = df(),animate = T,
-                         animate.opts = list(duration=5000,pathRadius=10),
-                         xlim = c(-4.1,4.1),ylim=c(0,.5))})
+    isolate({fluidSpline(obj = df(),
+                         opts = list(animate = T,
+                                     interpolate='basis',
+                                     duration=5000,
+                                     pathRadius=10,
+                                     xlim = c(-5.2,5.2),
+                                     ylim=c(0,.5)),
+                         )})
   })
 
   samp<-eventReactive(input$btn,{
     dat=as.data.frame(network$path)
     colnames(dat)=names(df())
-    sort(sample(dat$x,size = 10000,replace = T,prob = dat$prob))
+    browser()
+    sort(sample(dat$x,size = 1000,replace = T,prob = dat$prob))
   })
   
   newEstDF<-eventReactive(input$btn,{

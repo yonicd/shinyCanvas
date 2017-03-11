@@ -39,8 +39,13 @@
   output$d3 <- renderFluidSpline({
 
     
-    isolate({fluidSpline(obj = ys.df(),animate = T,ylim=c(0,1.1),
-                         animate.opts = list(duration=500,pathRadius=10))})
+    isolate({fluidSpline(obj = ys.df(),
+                         opts = list(animate = T,
+                                     interpolate='step-after',
+                                     ylim=c(0,1.1),
+                                     duration=500,
+                                     pathRadius=10)
+                         )})
   })
   
   failures <-reactive({

@@ -4,12 +4,15 @@
 \alias{fluidSpline}
 \title{fluidSpline}
 \usage{
-fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), xlim = NULL,
-  ylim = NULL, animate = FALSE, animate.opts = NULL, width = NULL,
-  height = NULL, elementId = NULL)
+fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), opts = NULL,
+  width = NULL, height = NULL, elementId = NULL)
 }
 \arguments{
 \item{obj}{data.frame that contains coordinates x,y}
+
+\item{width, height}{Must be a valid CSS unit (like \code{'100\%'},
+\code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
+string and have \code{'px'} appended.}
 
 \item{xlim}{numeric vector containing the minimum and maximum values of the x axis, if NULL limits will be set automatically}
 
@@ -17,17 +20,14 @@ fluidSpline(obj = data.frame(x = 1:10, y = runif(10)), xlim = NULL,
 
 \item{animate}{boolean that controls if there is animation in widget}
 
-\item{width, height}{Must be a valid CSS unit (like \code{'100\%'},
-\code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
-string and have \code{'px'} appended.}
-
 \item{animation.opts}{list that contains options to control animation, see details}
 }
 \description{
 Htmlwidget that allows users to interact with locations of points on a plot
 }
 \details{
-animation options include duration which is the speed which the animation moves (default 10000ms). 
+options to pass to server side includes:animation, animation duration, animation ease, animation radius,
+  duration which is the speed which the animation moves (default 10000ms). 
 When deploying a shiny app the number of samples taken from the path is a function of the size of the duration.
 and loop if set to TRUE (default FALSE) automatically restarts the animation when it reaches the end.
 pathRadius set the size of the circle that moves along the interpolated curve.

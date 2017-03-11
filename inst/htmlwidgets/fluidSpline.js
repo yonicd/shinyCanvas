@@ -28,25 +28,32 @@ HTMLWidgets.widget({
         var margin={top:20,right:20,bottom:30,left:40};
         var widthSVG = width-margin.left-margin.right;
         var heightSVG = height-margin.top-margin.bottom;
-        var duration=x.duration;
-        var pathRadius=x.pathRadius;
-        
-         var stp=0;
-         var pause=0; 
-         var pauseValues={
+        var duration=x.duration?x.duration:10000;
+        var pathRadius=x.pathRadius?x.pathRadius:10;
+        var ease= x.ease ? x.ease:'quadInOut';
+        var interpolateType=[ "linear","step-before","step-after",
+                              "basis","basis-open","basis-closed",
+                              "cardinal","cardinal-open","cardinal-closed",
+                              "monotone"];
+        var firstInterpolate=x.interpolate ? x.interpolate : 'linear' ;
+        var interpolateInitial=interpolateType.sort(function(x,y){ return x == firstInterpolate ? -1 : y == firstInterpolate ? 1 : 0; });
+        var loop=x.loop?1:0;
+        var stp=0;
+        var pause=0; 
+        var pauseValues={
             lastT:0,
             currentT:0
-          };
+            };
           
          
         var pathpoints={x:[],y:[]};  
  //var points= [[5,3], [10,10], [15,4], [2,8]];
- var data = x.data; 
- var axisName=Object.keys(data);
- var points = d3.range(0, x.n).map(function(i) {
-          return [data[axisName[0]][i], data[axisName[1]][i]];
-        });
- var pointsFloat = points[0];
+        var data = x.data; 
+        var axisName=Object.keys(data);
+        var points = d3.range(0, x.n).map(function(i) {
+                  return [data[axisName[0]][i], data[axisName[1]][i]];
+                });
+        var pointsFloat = points[0];
  
 // setup x 
   var xValue = function(d) { return d[0];}; // data -> value
@@ -102,7 +109,8 @@ var dragged = null,
   
 var line = d3.svg.line()
 .x(function(d) { return xMap(d); })
-.y(function(d) { return yMap(d); });
+.y(function(d) { return yMap(d); })
+.interpolate(firstInterpolate);
 
 var svg = d3.select(el).append("svg")
     .attr("width", widthSVG+margin.left+margin.right)
@@ -128,18 +136,7 @@ d3.select(window)
 d3.select("#interpolate")
     .on("change", change)
   .selectAll("option")
-    .data([
-      "linear",
-      "step-before",
-      "step-after",
-      "basis",
-      "basis-open",
-      "basis-closed",
-      "cardinal",
-      "cardinal-open",
-      "cardinal-closed",
-      "monotone"
-    ])
+    .data(interpolateInitial)
   .enter().append("option")
     .attr("value", function(d) { return d; })
     .text(function(d) { return d; });
@@ -215,7 +212,7 @@ function redraw() {
   circle.on("mousedown", function(d) { selected = dragged = d; redraw(); })
     .transition()
       .duration(750)
-      .ease("elastic")
+      .ease(ease)
       .attr("r", 2);
 function transition() {
 			svg.selectAll('ellipse').transition()
@@ -227,7 +224,7 @@ function transition() {
           currentT: 0
         };
         pathpoints={x:[],y:[]};
-        if(x.loop==1) transition();
+        if(loop==1) transition();
       });
 }
   
@@ -256,8 +253,8 @@ var pause =0;
 var duration=x.duration;    
 
 var circleBig = svg.append("ellipse")
-  .attr("rx", x.pathRadius)
-  .attr("ry", x.pathRadius)
+  .attr("rx", pathRadius)
+  .attr("ry", pathRadius)
   .attr('transform','translate('+ xMap(pointsFloat) + ',' + yMap(pointsFloat) +')');
 
   pauseButton(svg,widthSVG -margin.right-10 , margin.top-15);  
