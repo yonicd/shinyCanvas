@@ -35,4 +35,3 @@ pathRadius set the size of the circle that moves along the interpolated curve.
 \examples{
 if(interactive()) fluidSpline()
 }
-

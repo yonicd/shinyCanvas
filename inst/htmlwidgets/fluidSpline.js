@@ -13,18 +13,6 @@ HTMLWidgets.widget({
       renderValue: function(x) {
 
 //Setup 
-        var item='interpolate';
-        var aForm=document.createElement("Form");
-        var aLabel = document.createElement("Label");
-            aLabel.setAttribute("for", item);
-            aLabel.innerHTML = "Interpolate:";
-        var aSelect=document.createElement("Select");
-            aSelect.setAttribute("id", item);
-            
-        el.appendChild(aForm);
-        aForm.appendChild(aLabel);
-        aForm.appendChild(aSelect);
-
         var margin={top:20,right:20,bottom:30,left:40};
         var widthSVG = width-margin.left-margin.right;
         var heightSVG = height-margin.top-margin.bottom;
@@ -53,7 +41,21 @@ HTMLWidgets.widget({
         var points = d3.range(0, x.n).map(function(i) {
                   return [data[axisName[0]][i], data[axisName[1]][i]];
                 });
+                
         var pointsFloat = points[0];
+        
+        var item='interpolate';
+        var aForm=document.createElement("Form");
+        var aLabel = document.createElement("Label");
+            aLabel.setAttribute("for", item);
+            aLabel.setAttribute("id", item+'Label');
+            aLabel.innerHTML = "Interpolate:";
+        var aSelect=document.createElement("Select");
+            aSelect.setAttribute("id", item);
+        el.appendChild(aForm);
+        aForm.appendChild(aLabel);
+        aForm.appendChild(aSelect);
+        
  
 // setup x 
   var xValue = function(d) { return d[0];}; // data -> value
@@ -148,7 +150,16 @@ d3.select("#interpolate")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + heightSVG + ")")
       .call(xAxis)
-    .append("text")
+    .selectAll("text")
+      .attr("y", 0)
+      .attr("x", 9)
+      .attr("dy", ".35em")
+      .attr("transform", "rotate(90)")
+      .style("font-size",widthSVG/20+"px")
+      .style("text-anchor", "start");
+    
+    svg.select(".x.axis")
+      .append("text")
       .attr("class", "label")
       .attr("x", widthSVG)
       .attr("y", -6)
@@ -160,7 +171,11 @@ d3.select("#interpolate")
       .attr("class", "y axis")
 			.attr('transform', 'translate(0,0)')
       .call(yAxis)
-    .append("text")
+      .selectAll("text")
+      .style("font-size",heightSVG/20+"px");
+      
+  svg.select(".y.axis")
+      .append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -169,6 +184,13 @@ d3.select("#interpolate")
       .text(axisName[1]);   
 
 function redraw() {
+    if(points.length==1){
+     $("#"+item).hide();
+     $("#"+item+'Label').hide();
+    }else{
+      $("#"+item).show();
+      $("#"+item+'Label').show();
+    }
    var pauseValues = {
           lastT: 0,
           currentT: 0
