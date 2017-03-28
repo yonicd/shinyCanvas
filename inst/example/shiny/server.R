@@ -3,7 +3,7 @@ shinyServer(function(input, output, session) {
   network <- reactiveValues()
   
   output$d3=renderFluidSpline({
-    fluidSpline(data.frame(x=c(500,200),y=c(700,400)),
+    fluidSpline(data.frame(x=c(200),y=c(400)),
                 opts = list(xlim=c(200,1000),
                             ylim=c(200,1000),
                             interpolate='basis-closed'))
