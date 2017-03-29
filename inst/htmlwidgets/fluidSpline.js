@@ -11,7 +11,14 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(x) {
-
+    
+    // remove the old el
+    		d3.select(el).select("svg")
+    		  .remove()
+    		  .html("");
+    		var item='interpolate';
+    		$("#"+item).remove().html("");
+        $("#"+item+'Label').remove().html("");
 //Setup 
         var margin={top:20,right:20,bottom:30,left:40};
         var widthSVG = width-margin.left-margin.right;
@@ -44,7 +51,7 @@ HTMLWidgets.widget({
                 
         var pointsFloat = points[0];
         
-        var item='interpolate';
+        
         var aForm=document.createElement("Form");
         var aLabel = document.createElement("Label");
             aLabel.setAttribute("for", item);

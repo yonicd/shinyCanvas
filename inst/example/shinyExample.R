@@ -37,20 +37,19 @@ server <- function(input, output) {
   # })
   
   output$d3 <- renderFluidSpline({
-    isolate({fluidSpline(obj = df(),
+    fluidSpline(obj = df(),
                          opts = list(animate = T,
                                      interpolate='basis',
                                      duration=5000,
                                      pathRadius=10,
                                      xlim = c(-5.2,5.2),
                                      ylim=c(0,.5)),
-                         )})
+                         )
   })
 
   samp<-eventReactive(input$btn,{
     dat=as.data.frame(network$path)
     colnames(dat)=names(df())
-    browser()
     sort(sample(dat$x,size = 1000,replace = T,prob = dat$prob))
   })
   
