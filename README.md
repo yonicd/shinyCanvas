@@ -4,10 +4,11 @@ Htmlwidget that binds a fork of [Spline Editor](https://bl.ocks.org/mbostock/434
 
 For an interactive bl.ock page to try the d3js code go to [here](https://bl.ocks.org/yonicd/4bc59fca901388ebe4905bdb19af1567).
 
+<!---
 <iframe src="https://vida.io/gists/zNyrLzwmWNQgKGDmd/index.html" seamless frameborder="0" width="968" height="516"></iframe>
+--->
 
-<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineExample.gif" "width="300" height="300"/>
-
+![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineExample.gif)
 
 
 
