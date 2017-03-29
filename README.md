@@ -30,9 +30,10 @@ fluidSpline(obj = data.frame(x=1:10,y=runif(10)))
 When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
 #### Reactive Canvas:
-<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/plotSize.gif" "width="300" height="300"/>
+![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/plotSize.gif)
 
-<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineRGB.gif" "width="300" height="300"/>
+![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineRGB.gif)
+
 
 ### Click Pictures to see Youtube Videos
 
