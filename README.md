@@ -6,7 +6,7 @@ For an interactive bl.ock page to try the d3js code go to [here](https://bl.ocks
 
 <iframe src="https://vida.io/gists/zNyrLzwmWNQgKGDmd/index.html" seamless frameborder="0" width="968" height="516"></iframe>
 
-<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/fluidSplineExample.gif" "width="300" height="300"/>
+<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineExample.gif" "width="300" height="300"/>
 
 
 
@@ -18,26 +18,31 @@ The user inputs a data.frame that contains corrdinates x,y and then can:
   - change the type of interpolation between points
   - run animation on the interpolated curve to collect a sample from it
 
-##Usage as an htmlwidget in the Rstudio viewer
+## Usage as an htmlwidget in the Rstudio viewer
 ```
 fluidSpline()
 
 fluidSpline(obj = data.frame(x=1:10,y=runif(10)))
 ```
 
-##Usage in a Shiny app
+## Usage in a Shiny app
 
 When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
-###Click Pictures to see Youtube Videos
+#### Reactive Canvas:
+<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/plotSize.gif" "width="300" height="300"/>
 
-####Basic Usage:
+<img src="https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineRGB.gif" "width="300" height="300"/>
+
+### Click Pictures to see Youtube Videos
+
+#### Basic Usage:
 
 Script to run example below
 
 [![fluidSpline in Shiny](http://img.youtube.com/vi/obfjcYty7vk/0.jpg)](https://www.youtube.com/watch?v=obfjcYty7vk)
 
-#####Survival Analysis Example:
+##### Survival Analysis Example:
 
 [![Bivariate Slider in Shiny](http://img.youtube.com/vi/56Ee_2MdptI/0.jpg)](https://www.youtube.com/watch?v=56Ee_2MdptI)
 
