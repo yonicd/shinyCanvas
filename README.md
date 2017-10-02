@@ -1,4 +1,4 @@
-# fluidSpline
+# shinyCanvas
 
 Htmlwidget that binds a fork of [Spline Editor](https://bl.ocks.org/mbostock/4342190) by Mike Bostock to create an interactive object in Shiny. 
 
@@ -8,7 +8,7 @@ For an interactive bl.ock page to try the d3js code go to [here](https://bl.ocks
 <iframe src="https://vida.io/gists/zNyrLzwmWNQgKGDmd/index.html" seamless frameborder="0" width="968" height="516"></iframe>
 --->
 
-![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineExample.gif)
+![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/shinyCanvas_Example.gif)
 
 
 
@@ -21,9 +21,9 @@ The user inputs a data.frame that contains corrdinates x,y and then can:
 
 ## Usage as an htmlwidget in the Rstudio viewer
 ```
-fluidSpline()
+shinyCanvas()
 
-fluidSpline(obj = data.frame(x=1:10,y=runif(10)))
+shinyCanvas(obj = data.frame(x=1:10,y=runif(10)))
 ```
 
 ## Usage in a Shiny app
@@ -31,9 +31,9 @@ fluidSpline(obj = data.frame(x=1:10,y=runif(10)))
 When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
 #### Reactive Canvas:
-![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/plotSize.gif)
+![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/plotSize.gif)
 
-![](https://raw.githubusercontent.com/yonicd/fluidSpline/master/gifs/fluidSplineRGB.gif)
+![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/shinyCanvas_RGB.gif.gif)
 
 
 ### Click Pictures to see Youtube Videos
@@ -42,14 +42,14 @@ When run in the Shiny environment, Shiny is observing the points and returns to 
 
 Script to run example below
 
-[![fluidSpline in Shiny](http://img.youtube.com/vi/obfjcYty7vk/0.jpg)](https://www.youtube.com/watch?v=obfjcYty7vk)
+[![shinyCanvas in Shiny](http://img.youtube.com/vi/obfjcYty7vk/0.jpg)](https://www.youtube.com/watch?v=obfjcYty7vk)
 
 ##### Survival Analysis Example:
 
 [![Bivariate Slider in Shiny](http://img.youtube.com/vi/56Ee_2MdptI/0.jpg)](https://www.youtube.com/watch?v=56Ee_2MdptI)
 
 ```
-library(fluidSpline)
+library(shinyCanvas)
 library(shiny)
 server <- function(input, output) {
 
@@ -85,14 +85,14 @@ server <- function(input, output) {
     })    
   })
   
-  output$d3 <- renderFluidSpline({
-    isolate({fluidSpline(obj = df(),
+  output$d3 <- renderCanvas({
+    isolate({shinyCanvas(obj = df(),
                          opts = list(animate = T,duration=500,pathRadius=10))})
   })
 }
 
 ui <- fluidPage(
-  column(6,fluidSplineOutput(outputId="d3")),
+  column(6,canvasOutput(outputId="d3")),
   column(3,
          p('Plot Points'),
          tableOutput('pointsOut')

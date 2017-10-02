@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: 'fluidSpline',
+  name: 'canvas',
 
   type: 'output',
 
@@ -11,8 +11,8 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(x) {
-    
-    // remove the old el
+
+    //remove the old el
     		d3.select(el).select("svg")
     		  .remove()
     		  .html("");
@@ -20,17 +20,18 @@ HTMLWidgets.widget({
     		$("#"+item).remove().html("");
         $("#"+item+'Label').remove().html("");
 //Setup 
-        var margin={top:20,right:20,bottom:30,left:40};
+        var margin={top:20,right:50,bottom:70,left:50};
         var widthSVG = width-margin.left-margin.right;
         var heightSVG = height-margin.top-margin.bottom;
         var duration=x.duration?x.duration:10000;
         var pathRadius=x.pathRadius?x.pathRadius:10;
         var ease= x.ease ? x.ease:'quadInOut';
-        var interpolateType=[ "linear","step-before","step-after",
+        var interpolateType=[ "linear","linear-closed","step-before","step-after",
                               "basis","basis-open","basis-closed",
-                              "cardinal","cardinal-open","cardinal-closed",
+                              "cardinal","cardinal-open","cardinal-closed","bundle",
                               "monotone"];
         var firstInterpolate=x.interpolate ? x.interpolate : 'linear' ;
+        var selectLabel = x.selectLabel ? 1 : 0 ;
         var interpolateInitial=interpolateType.sort(function(x,y){ return x == firstInterpolate ? -1 : y == firstInterpolate ? 1 : 0; });
         var loop=x.loop?1:0;
         var stp=0;
@@ -53,14 +54,17 @@ HTMLWidgets.widget({
         
         
         var aForm=document.createElement("Form");
+        
         var aLabel = document.createElement("Label");
             aLabel.setAttribute("for", item);
             aLabel.setAttribute("id", item+'Label');
+            aLabel.style.marginLeft = "10px";
             aLabel.innerHTML = "Interpolate:";
         var aSelect=document.createElement("Select");
             aSelect.setAttribute("id", item);
+            aSelect.style.marginLeft = "5px";
         el.appendChild(aForm);
-        aForm.appendChild(aLabel);
+        if(selectLabel) aForm.appendChild(aLabel);
         aForm.appendChild(aSelect);
         
  
@@ -152,18 +156,26 @@ d3.select("#interpolate")
 
     svg.node().focus();
 
+  var axis_font = Math.min(15,heightSVG/20);
+
   // x-axis
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + heightSVG + ")")
       .call(xAxis)
     .selectAll("text")
+      .style("font-size",axis_font + "px")
+      .style("text-anchor", "start");
+      
+      if(x.x_angle){
+      svg.select(".x.axis")
+      .selectAll("text")
+      .attr("transform", "rotate("+ x.x_angle +")")
       .attr("y", 0)
       .attr("x", 9)
-      .attr("dy", ".35em")
-      .attr("transform", "rotate(90)")
-      .style("font-size",widthSVG/20+"px")
-      .style("text-anchor", "start");
+      .attr("dy", ".35em");
+      }
+      
     
     svg.select(".x.axis")
       .append("text")
@@ -171,6 +183,7 @@ d3.select("#interpolate")
       .attr("x", widthSVG)
       .attr("y", -6)
       .style("text-anchor", "end")
+      .style("font-size",axis_font + "px")
       .text(axisName[0]);
 
   // y-axis
@@ -179,7 +192,7 @@ d3.select("#interpolate")
 			.attr('transform', 'translate(0,0)')
       .call(yAxis)
       .selectAll("text")
-      .style("font-size",heightSVG/20+"px");
+      .style("font-size",axis_font+"px");
       
   svg.select(".y.axis")
       .append("text")
@@ -188,6 +201,7 @@ d3.select("#interpolate")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
+      .style("font-size",axis_font+"px")
       .text(axisName[1]);   
 
 function redraw() {
@@ -384,7 +398,7 @@ function keydown() {
 }
 },
 
-resize: function(width, height) {
+      resize: function(width, height) {
 
         d3.select(el).select("svg")
         .attr("width", width)

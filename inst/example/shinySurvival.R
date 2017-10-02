@@ -1,4 +1,4 @@
-  require(fluidSpline)
+  require(shinyCanvas)
   require(survival)
   require(broom)
   
@@ -36,10 +36,10 @@
                       surv=c(0.95,0.90,0.85,0.80,0.75,0.70,0.65,0.60,0.55,0.50,0.50))
   })
     
-  output$d3 <- renderFluidSpline({
+  output$d3 <- renderCanvas({
 
     
-    isolate({fluidSpline(obj = ys.df(),
+    isolate({canvas(obj = ys.df(),
                          opts = list(animate = T,
                                      interpolate='step-after',
                                      ylim=c(0,1.1),
@@ -111,7 +111,7 @@
 
   ui <- fluidPage(
     column(width=6,
-    fluidSplineOutput(outputId="d3"),
+    canvasOutput(outputId="d3"),
     column(6,
     p('Point Data'),
     tableOutput('pointsOut')),

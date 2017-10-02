@@ -1,2 +1,2 @@
 library(shiny)
-library(fluidSpline)
+library(shinyCanvas)

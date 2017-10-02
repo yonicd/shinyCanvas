@@ -1,4 +1,5 @@
-library(fluidSpline)
+library(stats4)
+library(shinyCanvas)
 library(shiny)
 
 
@@ -36,14 +37,14 @@ server <- function(input, output) {
   #   })    
   # })
   
-  output$d3 <- renderFluidSpline({
-    fluidSpline(obj = df(),
-                         opts = list(animate = T,
+  output$d3 <- renderCanvas({
+    canvas(obj = df(),
+                         opts = list(animate = TRUE,
                                      interpolate='basis',
                                      duration=5000,
                                      pathRadius=10,
                                      xlim = c(-5.2,5.2),
-                                     ylim=c(0,.5)),
+                                     ylim=c(0,.5))
                          )
   })
 
@@ -90,8 +91,8 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-  column(6,
-         fluidSplineOutput(outputId="d3"),
+  column(7,
+         canvasOutput(outputId="d3"),
          actionButton(inputId = 'btn',label = 'Estimate Parameters'),
          plotOutput('plotCompare')
   ),

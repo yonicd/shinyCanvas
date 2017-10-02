@@ -1,12 +1,8 @@
-#' @title fluidSpline
+#' @title a title
 #'
-#' @description Htmlwidget that allows users to interact with locations of points on a plot
-#' 
+#' @description a description.
 #' @param obj data.frame that contains coordinates x,y
-#' @param xlim numeric vector containing the minimum and maximum values of the x axis, if NULL limits will be set automatically
-#' @param ylim numeric vector containing the minimum and maximum values of the y axis, if NULL limits will be set automatically
-#' @param animate boolean that controls if there is animation in widget
-#' @param animation.opts list that contains options to control animation, see details
+#' @param opts opttions to pass to widget, see details
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
@@ -18,62 +14,59 @@
 #' pathRadius set the size of the circle that moves along the interpolated curve.
 #'
 #' @examples
-#' if(interactive()) fluidSpline()
+#' if(interactive()) canvas(obj=data.frame(x=1:10,y=runif(10)))
+#' 
 #' @import htmlwidgets
 #'
 #' @export
-fluidSpline <- function(obj=data.frame(x=1:10,y=runif(10)),opts=NULL, width = NULL, height = NULL, elementId = NULL) {
+canvas <- function(obj, opts=NULL, width = NULL, height = NULL, elementId = NULL) {
 
-
-  
   # forward options using x
   x = list(
     data=obj,
     n=nrow(obj)
   )
-
-    if(!is.null(opts)){
-      nm=names(opts)
-      for(i in nm) x[[i]]=opts[[i]]
-    }
-
   
+  if(!is.null(opts)){
+    nm=names(opts)
+    for(i in nm) x[[i]]=opts[[i]]
+  }
+
   # create widget
   htmlwidgets::createWidget(
-    name = 'fluidSpline',
+    name = 'canvas',
     x,
     width = width,
     height = height,
-    htmlwidgets::sizingPolicy(padding = 10, browser.fill = TRUE),
-    package = 'fluidSpline',
+    package = 'shinyCanvas',
     elementId = elementId
   )
 }
 
-#' Shiny bindings for fluidSpline
+#' Shiny bindings for canvas
 #'
-#' Output and render functions for using fluidSpline within Shiny
+#' Output and render functions for using canvas within Shiny
 #' applications and interactive Rmd documents.
 #'
 #' @param outputId output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a fluidSpline
+#' @param expr An expression that generates a canvas
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #'
-#' @name fluidSpline-shiny
+#' @name canvas-shiny
 #'
 #' @export
-fluidSplineOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'fluidSpline', width, height, package = 'fluidSpline')
+canvasOutput <- function(outputId, width = '100%', height = '400px'){
+  htmlwidgets::shinyWidgetOutput(outputId = outputId,name =  'canvas', width, height, package = 'shinyCanvas')
 }
 
-#' @rdname fluidSpline-shiny
+#' @rdname canvas-shiny
 #' @export
-renderFluidSpline <- function(expr, env = parent.frame(), quoted = FALSE) {
+renderCanvas <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, fluidSplineOutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr = expr, outputFunction = canvasOutput, env, quoted = TRUE)
 }
