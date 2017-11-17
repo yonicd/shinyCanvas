@@ -14,7 +14,7 @@ For an interactive bl.ock page to try the d3js code go to [here](https://bl.ocks
 <iframe src="https://vida.io/gists/zNyrLzwmWNQgKGDmd/index.html" seamless frameborder="0" width="968" height="516"></iframe>
 --->
 
-![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/shinyCanvas_Example.gif)
+![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/fluidSplineAnimation.gif)
 
 
 
@@ -27,9 +27,7 @@ The user inputs a data.frame that contains corrdinates x,y and then can:
 
 ## Usage as an htmlwidget in the Rstudio viewer
 ```
-shinyCanvas()
-
-shinyCanvas(obj = data.frame(x=1:10,y=runif(10)))
+canvas(obj = data.frame(x=1:10,y=runif(10)))
 ```
 
 ## Usage in a Shiny app
