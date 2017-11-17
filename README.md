@@ -90,7 +90,7 @@ server <- function(input, output) {
   })
   
   output$d3 <- renderCanvas({
-    isolate({shinyCanvas(obj = df(),animate = TRUE,duration=500,pathRadius=10)})
+    isolate({canvas(obj = df(),animate = TRUE,duration=500,pathRadius=10)})
   })
 }
 
