@@ -25,7 +25,7 @@ The user inputs a data.frame that contains corrdinates x,y and then can:
   - change the type of interpolation between points
   - run animation on the interpolated curve to collect a sample from it
 
-## Usage as an htmlwidget in the Rstudio viewer
+## Usage as an htmlwidget in the RStudio viewer
 ```
 canvas(obj = data.frame(x=1:10,y=runif(10)))
 ```
@@ -35,9 +35,9 @@ canvas(obj = data.frame(x=1:10,y=runif(10)))
 When run in the Shiny environment, Shiny is observing the points and returns to the server their x,y mapping. So instead of predefining scenarios in simulations you can let the user define the relationship between two variables.
 
 #### Reactive Canvas:
-![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/plotSize.gif)
+![](https://github.com/metrumresearchgroup/shinyCanvas/blob/master/gifs/plotSize.gif?raw=true)
 
-![](https://raw.githubusercontent.com/yonicd/shinyCanvas/master/gifs/shinyCanvas_RGB.gif.gif)
+![](https://github.com/metrumresearchgroup/shinyCanvas/blob/master/gifs/shinyCanvas_RGB.gif?raw=true)
 
 
 ### Click Pictures to see Youtube Videos
