@@ -40,11 +40,10 @@
 
     
     isolate({canvas(obj = ys.df(),
-                         opts = list(animate = T,
-                                     interpolate='step-after',
-                                     ylim=c(0,1.1),
-                                     duration=500,
-                                     pathRadius=10)
+                    animate = TRUE,
+                    interpolate='step-after',
+                    ylim=c(0,1.1),
+                    duration=500
                          )})
   })
   

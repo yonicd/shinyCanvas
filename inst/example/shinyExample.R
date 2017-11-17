@@ -39,13 +39,12 @@ server <- function(input, output) {
   
   output$d3 <- renderCanvas({
     canvas(obj = df(),
-                         opts = list(animate = TRUE,
-                                     interpolate='basis',
-                                     duration=5000,
-                                     pathRadius=10,
-                                     xlim = c(-5.2,5.2),
-                                     ylim=c(0,.5))
-                         )
+           animate = TRUE,
+           interpolate='basis',
+           duration=5000,
+           xlim = c(-5.2,5.2),
+           ylim=c(0,.5)
+           )
   })
 
   samp<-eventReactive(input$btn,{

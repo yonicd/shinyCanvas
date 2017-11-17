@@ -3,11 +3,12 @@ shinyServer(function(input, output, session) {
   network <- shiny::reactiveValues()
   
   output$d3=shinyCanvas::renderCanvas({
-    shinyCanvas::canvas(data.frame(x=c(200),y=c(400)),
-                opts = list(xlim=c(200,1000),
-                            ylim=c(200,1000),
-                            interpolate='basis-closed',
-                            x_angle=90))
+    shinyCanvas::canvas(
+      obj = data.frame(x=c(200),y=c(400)),
+      xlim=c(200,1000),
+      ylim=c(200,1000),
+      interpolate='basis-closed',
+      x_angle=90)
   })
   
   shiny::observeEvent(input$d3_update,{

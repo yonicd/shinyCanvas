@@ -1,10 +1,16 @@
 Package: shinyCanvas
-Title: Htmlwidget that creates a reactive canvas
+Title: 'Htmlwidget' that creates a reactive canvas to use in Shiny
 Version: 0.0.1
-Authors@R: person("Jonathan", "Sidi", email = "yonis@metrumrg.com", role = c("aut", "cre"))
-Description: Htmlwidget that binds Spline Editor (https://bl.ocks.org/mbostock/4342190) by Mike Bostock to create an observable object in Shiny
-Depends:
-    R (>= 3.3.2)
+Authors@R: person("Jonathan", "Sidi", email = "yonis@metrumrg.com", role =
+        c("aut", "cre"))
+Description: Create and customize an interactive canvas using the 'D3'
+    JavaScript library and the 'htmlwidgets' package. The canvas can be used
+    directly from the R console, from 'RStudio', in Shiny apps and R Markdown documents.
+    When in Shiny the canvas is observed by the server and can be used as a functional
+    slider to work in a two dimensional space.
+Depends: R (>= 3.3.2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+License: MIT + file LICENSE
+Imports: htmlwidgets

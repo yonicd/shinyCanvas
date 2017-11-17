@@ -1,6 +1,12 @@
 # shinyCanvas
 
-Htmlwidget that binds a fork of [Spline Editor](https://bl.ocks.org/mbostock/4342190) by Mike Bostock to create an interactive object in Shiny. 
+Create and customize an interactive canvas using the 'D3' JavaScript library and the 'htmlwidgets' package. 
+
+The canvas can be used directly from the R console, from 'RStudio', in Shiny apps and R Markdown documents.
+
+When in Shiny the canvas is observed by the server and can be used as a functional slider (with animation) to work in a two dimensional space.
+
+The main objective is to create a new object for Shiny that represents a functional slider extending the one dimensional `shiny::sliderInput`.
 
 For an interactive bl.ock page to try the d3js code go to [here](https://bl.ocks.org/yonicd/4bc59fca901388ebe4905bdb19af1567).
 
@@ -86,8 +92,7 @@ server <- function(input, output) {
   })
   
   output$d3 <- renderCanvas({
-    isolate({shinyCanvas(obj = df(),
-                         opts = list(animate = T,duration=500,pathRadius=10))})
+    isolate({shinyCanvas(obj = df(),animate = TRUE,duration=500,pathRadius=10)})
   })
 }
 
